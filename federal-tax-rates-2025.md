@@ -56,3 +56,83 @@
 | Married Filing Jointly | $31,500 |
 | Married Filing Separately | $15,750 |
 | Head of Household | $23,625 |
+
+---
+
+# Long-Term Capital Gains / Qualified Dividends Brackets
+
+## Single
+
+| Tax Rate | On Taxable Income From | Up To |
+|----------|------------------------|-------|
+| 0% | $0 | $48,350 |
+| 15% | $48,351 | $533,400 |
+| 20% | $533,401 | And up |
+
+## Married Filing Jointly
+
+| Tax Rate | On Taxable Income From | Up To |
+|----------|------------------------|-------|
+| 0% | $0 | $96,700 |
+| 15% | $96,701 | $600,050 |
+| 20% | $600,051 | And up |
+
+## Married Filing Separately
+
+| Tax Rate | On Taxable Income From | Up To |
+|----------|------------------------|-------|
+| 0% | $0 | $48,350 |
+| 15% | $48,351 | $300,000 |
+| 20% | $300,001 | And up |
+
+## Head of Household
+
+| Tax Rate | On Taxable Income From | Up To |
+|----------|------------------------|-------|
+| 0% | $0 | $64,750 |
+| 15% | $64,751 | $566,700 |
+| 20% | $566,701 | And up |
+
+Note: LTCG brackets are stacked on top of ordinary taxable income to determine the applicable rate.
+
+---
+
+# Net Investment Income Tax (NIIT)
+
+- **Rate:** 3.8% on net investment income
+- Applies when AGI exceeds the threshold below
+
+| Filing Status | AGI Threshold |
+|---------------|--------------|
+| Single | $200,000 |
+| Married Filing Jointly | $250,000 |
+| Married Filing Separately | $125,000 |
+| Head of Household | $200,000 |
+
+Tax base = lesser of: total net investment income OR (AGI − threshold)
+
+---
+
+# FICA Taxes
+
+## Social Security
+
+- **Rate:** 6.2% (employee share)
+- **Wage base limit:** $176,100 per person
+- Calculated per spouse for MFJ (each has their own $176,100 cap)
+- Applies to FICA wages only (Gross wages − Health − Other deductions)
+
+## Medicare
+
+- **Rate:** 1.45% on all FICA wages
+
+## Additional Medicare
+
+- **Rate:** 0.9% on FICA wages exceeding the threshold below
+
+| Filing Status | Threshold |
+|---------------|----------|
+| Single | $200,000 |
+| Married Filing Jointly | $250,000 |
+| Married Filing Separately | $125,000 |
+| Head of Household | $200,000 |
