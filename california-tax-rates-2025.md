@@ -44,9 +44,23 @@ Use only if your taxable income on Form 540, line 19 is more than $100,000. If $
 | 11.30% | $606,251 | $1,010,417 |
 | 12.30% | $1,010,417 | And over |
 
+## Mental Health Services Tax (Prop 63)
+
+- Additional **1%** on taxable income over **$1,000,000** (all filing statuses)
+- Makes the effective top CA rate **13.3%** (12.3% + 1%) instead of 12.3%
+- **Not included** in this calculator
+
 ## Standard Deductions
 
 | Filing Status | Standard Deduction |
 |---------------|-------------------|
 | Single or Married/RDP Filing Separately | $5,706 |
 | Married/RDP Filing Jointly, Head of Household, or Qualifying Widow(er) | $11,412 |
+
+---
+
+## CA SDI (State Disability Insurance)
+
+- **Rate:** 1.2% on all wages (no wage limit)
+- Applies to FICA wages only (Gross wages − Health − Other deductions)
+- Does not apply to investment income
