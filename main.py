@@ -78,7 +78,7 @@ def calculate_progressive_tax(taxable_income, brackets):
 
     Returns:
         (total_tax, bracket_details): total tax and list of
-        (bracket_label, rate, taxed_amount, tax_in_bracket)
+        (lower_limit, upper_limit, rate, taxed_amount, tax_in_bracket)
     """
     if taxable_income <= 0:
         return 0.0, []
@@ -99,12 +99,7 @@ def calculate_progressive_tax(taxable_income, brackets):
         tax_in_bracket = taxable_in_bracket * rate
         total_tax += tax_in_bracket
 
-        if upper_limit == float("inf"):
-            bracket_label = f"{fmt(prev_limit)}+"
-        else:
-            bracket_label = f"{fmt(prev_limit)} - {fmt(upper_limit)}"
-
-        details.append((bracket_label, rate, taxable_in_bracket, tax_in_bracket))
+        details.append((prev_limit, upper_limit, rate, taxable_in_bracket, tax_in_bracket))
         prev_limit = upper_limit
 
     return total_tax, details
@@ -121,7 +116,8 @@ def calculate_ltcg_tax(ordinary_taxable_income, ltcg_income, brackets):
         brackets: LTCG brackets for the filing status
 
     Returns:
-        (total_tax, bracket_details)
+        (total_tax, bracket_details): total tax and list of
+        (lower_limit, upper_limit, rate, taxed_amount, tax_in_bracket)
     """
     if ltcg_income <= 0:
         return 0.0, []
@@ -151,12 +147,7 @@ def calculate_ltcg_tax(ordinary_taxable_income, ltcg_income, brackets):
         tax_in_bracket = taxable_in_bracket * rate
         total_tax += tax_in_bracket
 
-        if upper_limit == float("inf"):
-            bracket_label = f"{fmt(prev_limit)}+"
-        else:
-            bracket_label = f"{fmt(prev_limit)} - {fmt(upper_limit)}"
-
-        details.append((bracket_label, rate, taxable_in_bracket, tax_in_bracket))
+        details.append((prev_limit, upper_limit, rate, taxable_in_bracket, tax_in_bracket))
 
         if stack_end <= upper_limit:
             break
@@ -592,7 +583,11 @@ def print_bracket_table(details, label=""):
 
     print(f"    {'Bracket':<30} {'Rate':>7} {'Taxed Amount':>16} {'Tax':>14}")
     print(f"    {'-' * 30} {'-' * 7} {'-' * 16} {'-' * 14}")
-    for bracket_label, rate, amount, tax in details:
+    for lower, upper, rate, amount, tax in details:
+        if upper == float("inf"):
+            bracket_label = f"{fmt(lower)}+"
+        else:
+            bracket_label = f"{fmt(lower)} - {fmt(upper)}"
         print(
             f"    {bracket_label:<30} {pct(rate):>7} {fmt(amount):>16} {fmt(tax):>14}"
         )
