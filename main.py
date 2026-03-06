@@ -406,12 +406,56 @@ def collect_inputs():
         s2_health = 0.0
         s2_other = 0.0
 
+    # --- CA VDI (Voluntary Disability Insurance) ---
+    print("\n  CA VDI (Voluntary Disability Insurance)")
+    print("  " + "-" * 40)
+    print("  If enrolled in a CA VDI plan, the disability insurance cost")
+    print("  is the greater of the standard CA SDI or the VDI max contribution.")
+    if filing_status == MFJ:
+        while True:
+            s1_vdi_choice = input("\n  Is Spouse 1 enrolled in CA VDI? (y/n, default n): ").strip().lower()
+            if s1_vdi_choice in ("y", "yes"):
+                s1_vdi_enrolled = True
+                s1_vdi_max = get_input("  Spouse 1 max annual VDI contribution: $", required=True)
+                break
+            elif s1_vdi_choice in ("n", "no", ""):
+                s1_vdi_enrolled = False
+                s1_vdi_max = 0.0
+                break
+            print("  ⚠  Please enter y or n.")
+        while True:
+            s2_vdi_choice = input("\n  Is Spouse 2 enrolled in CA VDI? (y/n, default n): ").strip().lower()
+            if s2_vdi_choice in ("y", "yes"):
+                s2_vdi_enrolled = True
+                s2_vdi_max = get_input("  Spouse 2 max annual VDI contribution: $", required=True)
+                break
+            elif s2_vdi_choice in ("n", "no", ""):
+                s2_vdi_enrolled = False
+                s2_vdi_max = 0.0
+                break
+            print("  ⚠  Please enter y or n.")
+    else:
+        while True:
+            vdi_choice = input("\n  Are you enrolled in CA VDI? (y/n, default n): ").strip().lower()
+            if vdi_choice in ("y", "yes"):
+                s1_vdi_enrolled = True
+                s1_vdi_max = get_input("  Max annual VDI contribution: $", required=True)
+                break
+            elif vdi_choice in ("n", "no", ""):
+                s1_vdi_enrolled = False
+                s1_vdi_max = 0.0
+                break
+            print("  ⚠  Please enter y or n.")
+        s2_vdi_enrolled = False
+        s2_vdi_max = 0.0
+
     # --- Post-Tax Contributions ---
     print("\n  POST-TAX CONTRIBUTIONS (informational only)")
     print("  " + "-" * 40)
     print("  (Press Enter to skip any field, defaults to $0)\n")
     nondeduc_ira = get_input("  Non-deductible Traditional IRA:   $")
     after_tax_401k = get_input("  After-tax 401(k) contributions:   $")
+    other_posttax = get_input("  Other post-tax contributions:     $")
 
     return {
         "filing_status": filing_status,
@@ -430,8 +474,13 @@ def collect_inputs():
         "s2_retirement": s2_retirement,
         "s2_health": s2_health,
         "s2_other": s2_other,
+        "s1_vdi_enrolled": s1_vdi_enrolled,
+        "s1_vdi_max": s1_vdi_max,
+        "s2_vdi_enrolled": s2_vdi_enrolled,
+        "s2_vdi_max": s2_vdi_max,
         "nondeduc_ira": nondeduc_ira,
         "after_tax_401k": after_tax_401k,
+        "other_posttax": other_posttax,
     }
 
 
@@ -482,7 +531,7 @@ def calculate_taxes(inputs):
     total_fica_wages = s1_fica_wages + s2_fica_wages
 
     # ── Post-Tax Contributions ──
-    total_posttax = inputs["nondeduc_ira"] + inputs["after_tax_401k"]
+    total_posttax = inputs["nondeduc_ira"] + inputs["after_tax_401k"] + inputs["other_posttax"]
 
     # ── AGI ──
     agi = total_gross - total_pretax_deductions
@@ -547,8 +596,23 @@ def calculate_taxes(inputs):
         addl_medicare_tax = 0.0
     total_medicare = medicare_tax + addl_medicare_tax
 
-    # ── CA SDI (FICA wages, no cap) ──
-    ca_sdi = total_fica_wages * CA_SDI_RATE
+    # ── CA SDI / VDI (per-spouse, FICA wages, no cap) ──
+    # Standard SDI is calculated per spouse on their FICA wages.
+    # If enrolled in CA VDI, use the greater of standard SDI or VDI max contribution.
+    s1_ca_sdi = s1_fica_wages * CA_SDI_RATE
+    s2_ca_sdi = s2_fica_wages * CA_SDI_RATE
+
+    if inputs["s1_vdi_enrolled"]:
+        s1_ca_sdi_or_vdi = max(s1_ca_sdi, inputs["s1_vdi_max"])
+    else:
+        s1_ca_sdi_or_vdi = s1_ca_sdi
+
+    if inputs["s2_vdi_enrolled"]:
+        s2_ca_sdi_or_vdi = max(s2_ca_sdi, inputs["s2_vdi_max"])
+    else:
+        s2_ca_sdi_or_vdi = s2_ca_sdi
+
+    ca_sdi = s1_ca_sdi_or_vdi + s2_ca_sdi_or_vdi
 
     # ── Totals ──
     total_fica = ss_tax + total_medicare
@@ -620,6 +684,10 @@ def calculate_taxes(inputs):
         "medicare_tax": medicare_tax,
         "addl_medicare_tax": addl_medicare_tax,
         "total_medicare": total_medicare,
+        "s1_ca_sdi": s1_ca_sdi,
+        "s2_ca_sdi": s2_ca_sdi,
+        "s1_ca_sdi_or_vdi": s1_ca_sdi_or_vdi,
+        "s2_ca_sdi_or_vdi": s2_ca_sdi_or_vdi,
         "ca_sdi": ca_sdi,
         "total_fica": total_fica,
         "total_payroll": total_payroll,
@@ -863,15 +931,56 @@ def display_results(r):
             f"    Excess wages:  {fmt(r['total_fica_wages'] - threshold):>16}"
             f"   Tax: {fmt(r['addl_medicare_tax']):>14}"
         )
-    print(f"\n  CA SDI ({pct(CA_SDI_RATE)} on all FICA wages, no wage limit):")
-    print(
-        f"    FICA wages:    {fmt(r['total_fica_wages']):>16}"
-        f"   Tax: {fmt(r['ca_sdi']):>14}"
-    )
+    s1_vdi = inputs["s1_vdi_enrolled"]
+    s2_vdi = inputs["s2_vdi_enrolled"]
+    any_vdi = s1_vdi or s2_vdi
+
+    if any_vdi:
+        print(f"\n  CA SDI / VDI:")
+    else:
+        print(f"\n  CA SDI ({pct(CA_SDI_RATE)} on all FICA wages, no wage limit):")
+
+    if fs == MFJ:
+        # Spouse 1
+        if s1_vdi:
+            print(f"    Spouse 1 (VDI enrolled):")
+            print(f"      Standard SDI ({pct(CA_SDI_RATE)} × {fmt(r['s1_fica_wages'])}): {fmt(r['s1_ca_sdi']):>14}")
+            print(f"      VDI max annual contribution:       {fmt(inputs['s1_vdi_max']):>14}")
+            print(f"      Applied (greater of):              {fmt(r['s1_ca_sdi_or_vdi']):>14}")
+        else:
+            print(
+                f"    Spouse 1:      {fmt(r['s1_fica_wages']):>16}"
+                f"   SDI: {fmt(r['s1_ca_sdi_or_vdi']):>14}"
+            )
+        # Spouse 2
+        if s2_vdi:
+            print(f"    Spouse 2 (VDI enrolled):")
+            print(f"      Standard SDI ({pct(CA_SDI_RATE)} × {fmt(r['s2_fica_wages'])}): {fmt(r['s2_ca_sdi']):>14}")
+            print(f"      VDI max annual contribution:       {fmt(inputs['s2_vdi_max']):>14}")
+            print(f"      Applied (greater of):              {fmt(r['s2_ca_sdi_or_vdi']):>14}")
+        else:
+            print(
+                f"    Spouse 2:      {fmt(r['s2_fica_wages']):>16}"
+                f"   SDI: {fmt(r['s2_ca_sdi_or_vdi']):>14}"
+            )
+        print(
+            f"    Combined:      {'':>16}"
+            f"   {'VDI/SDI' if any_vdi else 'SDI'}: {fmt(r['ca_sdi']):>14}"
+        )
+    else:
+        if s1_vdi:
+            print(f"      Standard SDI ({pct(CA_SDI_RATE)} × {fmt(r['total_fica_wages'])}): {fmt(r['s1_ca_sdi']):>14}")
+            print(f"      VDI max annual contribution:       {fmt(inputs['s1_vdi_max']):>14}")
+            print(f"      Applied (greater of):              {fmt(r['ca_sdi']):>14}")
+        else:
+            print(
+                f"    FICA wages:    {fmt(r['total_fica_wages']):>16}"
+                f"   Tax: {fmt(r['ca_sdi']):>14}"
+            )
 
     print()
     print(f"  Total FICA:                       {fmt(r['total_fica']):>16}")
-    print(f"  CA SDI:                           {fmt(r['ca_sdi']):>16}")
+    print(f"  CA {'SDI/VDI' if any_vdi else 'SDI'}:{'':>{25 - (2 if any_vdi else 0)}}{fmt(r['ca_sdi']):>16}")
     highlight_box("Total Payroll Taxes:              ", fmt(r["total_payroll"]))
 
     # ── 10. Tax Summary ──
@@ -882,7 +991,9 @@ def display_results(r):
     print(f"  Total Federal Tax:                {fmt(r['total_federal_tax']):>16}")
     print(f"  Total California Tax:             {fmt(r['total_ca_tax']):>16}")
     print(f"  Total Payroll Taxes:              {fmt(r['total_payroll']):>16}")
-    print(f"    (FICA: {fmt(r['total_fica'])}  +  CA SDI: {fmt(r['ca_sdi'])})")
+    any_vdi = inputs["s1_vdi_enrolled"] or inputs["s2_vdi_enrolled"]
+    sdi_label = "CA SDI/VDI" if any_vdi else "CA SDI"
+    print(f"    (FICA: {fmt(r['total_fica'])}  +  {sdi_label}: {fmt(r['ca_sdi'])})")
     print()
     big_box("TOTAL ALL TAXES:                  ", fmt(r["total_all_taxes"]))
     print()
@@ -894,6 +1005,7 @@ def display_results(r):
     section_header("POST-TAX CONTRIBUTIONS (informational)")
     print(f"  Non-deductible Traditional IRA:   {fmt(inputs['nondeduc_ira']):>16}")
     print(f"  After-tax 401(k):                 {fmt(inputs['after_tax_401k']):>16}")
+    print(f"  Other:                            {fmt(inputs['other_posttax']):>16}")
     print(f"                                    {'-' * 16}")
     print(f"  Total Post-Tax Contributions:     {fmt(r['total_posttax']):>16}")
 
