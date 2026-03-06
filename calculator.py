@@ -126,8 +126,8 @@ def calculate_taxes(inputs, tax_data):
     ordinary_additional = (
         inputs["st_cap_gains"]
         + inputs["ordinary_dividends"]
-        + inputs["bond_interest"]
-        + inputs["savings_interest"]
+        + inputs["interest_income"]
+        + inputs["other_income"]
     )
     preferential_income = inputs["lt_cap_gains"] + inputs["qualified_dividends"]
     total_additional = ordinary_additional + preferential_income

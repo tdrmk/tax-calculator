@@ -28,8 +28,8 @@ SPOUSE_2_WAGES = "0"  # only used when FILING_STATUS = "2" (MFJ)
 # Additional Income — Ordinary (taxed at ordinary rates)
 SHORT_TERM_CAP_GAINS = "5000"
 ORDINARY_DIVIDENDS = "1000"
-BOND_INTEREST = "500"
-SAVINGS_INTEREST = "2000"
+INTEREST_INCOME = "500"
+OTHER_INCOME = "2000"
 
 # Additional Income — Preferential (LTCG / Qualified Dividends)
 LONG_TERM_CAP_GAINS = "10000"
@@ -82,8 +82,8 @@ else:
 inputs += [
     SHORT_TERM_CAP_GAINS,
     ORDINARY_DIVIDENDS,
-    BOND_INTEREST,
-    SAVINGS_INTEREST,
+    INTEREST_INCOME,
+    OTHER_INCOME,
     LONG_TERM_CAP_GAINS,
     QUALIFIED_DIVIDENDS,
 ]

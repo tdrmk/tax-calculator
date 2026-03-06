@@ -134,8 +134,8 @@ def collect_inputs():
     print("  (Press Enter to skip any field, defaults to $0)\n")
     st_cap_gains = get_input("  Short-term capital gains:       $")
     ordinary_dividends = get_input("  Ordinary (non-qualified) div:   $")
-    bond_interest = get_input("  Bond interest:                  $")
-    savings_interest = get_input("  Savings account interest:       $")
+    interest_income = get_input("  Interest income:                $")
+    other_income = get_input("  Other income:                   $")
 
     # --- Additional Income — Preferential ---
     print("\n  ADDITIONAL INCOME — Preferential (LTCG / Qualified Dividends)")
@@ -234,8 +234,8 @@ def collect_inputs():
         "spouse2_wages": spouse2_wages,
         "st_cap_gains": st_cap_gains,
         "ordinary_dividends": ordinary_dividends,
-        "bond_interest": bond_interest,
-        "savings_interest": savings_interest,
+        "interest_income": interest_income,
+        "other_income": other_income,
         "lt_cap_gains": lt_cap_gains,
         "qualified_dividends": qualified_dividends,
         "s1_retirement": s1_retirement,
@@ -288,8 +288,8 @@ def display_results(r, tax_data):
     print(f"  Additional Ordinary Income:")
     print(f"    Short-term capital gains:        {fmt(inputs['st_cap_gains']):>16}")
     print(f"    Ordinary dividends:              {fmt(inputs['ordinary_dividends']):>16}")
-    print(f"    Bond interest:                   {fmt(inputs['bond_interest']):>16}")
-    print(f"    Savings account interest:        {fmt(inputs['savings_interest']):>16}")
+    print(f"    Interest income:                 {fmt(inputs['interest_income']):>16}")
+    print(f"    Other income:                    {fmt(inputs['other_income']):>16}")
     print(f"    Subtotal:                        {fmt(r['ordinary_additional']):>16}")
     print()
     print(f"  Additional Preferential Income:")
@@ -367,6 +367,8 @@ def display_results(r, tax_data):
     print(f"    = AGI - Fed Std Deduction - Preferential Income")
     print(f"  Federal Preferential Income:      {fmt(r['preferential_income']):>16}")
     print(f"    = LTCG + Qualified Dividends (stacked on ordinary)")
+    print(f"  Federal Taxable Income:           {fmt(r['fed_ordinary_taxable'] + r['preferential_income']):>16}")
+    print(f"    = Ordinary + Preferential")
     print(f"  California Taxable Income:        {fmt(r['ca_taxable']):>16}")
     print(f"    = AGI - CA Std Deduction (CA taxes all as ordinary)")
 

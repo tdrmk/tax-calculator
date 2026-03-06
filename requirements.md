@@ -24,8 +24,8 @@ Income from taxable brokerage accounts and savings, split into two tax buckets:
 |---|------------|--------|
 | 1 | **Short-term capital gains** | Assets held ≤ 1 year |
 | 2 | **Ordinary (non-qualified) dividends** | Dividends not meeting qualified holding period |
-| 3 | **Bond interest** | Coupon/interest payments from bonds |
-| 4 | **Savings account interest** | Bank savings / money market interest |
+| 3 | **Interest income** | Bond coupons, savings accounts, money market interest, etc. |
+| 4 | **Other income** | Any other ordinary income not covered above |
 
 ### 2.2 Preferential Income Bucket (preferential federal rates; CA taxes as ordinary)
 
@@ -178,7 +178,7 @@ The calculator displays a detailed breakdown report with the following sections:
 - Filing status
 - For MFJ: Spouse 1 wages, Spouse 2 wages, and combined wages
 - For other statuses: gross wages/salary
-- Additional ordinary income breakdown (short-term gains, ordinary dividends, bond interest, savings interest, subtotal)
+- Additional ordinary income breakdown (short-term gains, ordinary dividends, interest income, other income, subtotal)
 - Additional preferential income breakdown (long-term gains, qualified dividends, subtotal)
 - **Total gross income** (highlighted)
 
