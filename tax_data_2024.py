@@ -151,6 +151,10 @@ ADDITIONAL_MEDICARE_THRESHOLD = {
 # --- CA SDI (2024) — no wage limit (cap removed 1/1/2024) ---
 CA_SDI_RATE = 0.011
 
+# --- 401(k) / 403(b) / 457(b) Elective Deferral Limits (2024) ---
+ELECTIVE_DEFERRAL_LIMIT = 23_000      # IRC §402(g)
+TOTAL_ANNUAL_ADDITION_LIMIT = 69_000  # IRC §415(c) — employee + employer combined
+
 # --- NIIT (Net Investment Income Tax) ---
 NIIT_RATE = 0.038
 NIIT_THRESHOLD = {
