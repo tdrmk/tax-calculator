@@ -201,9 +201,44 @@ def calculate_taxes(inputs, tax_data):
     fed_std_deduction = FEDERAL_STANDARD_DEDUCTION
     ca_std_deduction = CA_STANDARD_DEDUCTION
 
+    # ── California Taxable Income (computed first — needed for SALT) ──
+    # CA taxes ALL income as ordinary (no preferential LTCG rates)
+    ca_taxable = max(agi - ca_std_deduction, 0)
+
+    # ── California Tax ──
+    ca_tax, ca_details = calculate_progressive_tax(ca_taxable, CA_BRACKETS)
+    # TODO: Add CA Mental Health Services Tax (Prop 63) — additional 1% on
+    #       taxable income over $1,000,000 (all filing statuses), making the
+    #       effective top CA rate 13.3% instead of 12.3%.
+    total_ca_tax = ca_tax
+
+    # ── SALT Deduction (Itemized) ──
+    # For now, SALT = CA state income tax only (no property tax, local tax, etc.)
+    # The SALT cap is $40K (2025 OBBBA), with income-based phase-out.
+    SALT_CAP = tax_data.SALT_CAP[fs]
+    SALT_PHASEOUT_THRESHOLD = tax_data.SALT_PHASEOUT_THRESHOLD[fs]
+    SALT_PHASEOUT_RATE = tax_data.SALT_PHASEOUT_RATE
+    SALT_FLOOR = tax_data.SALT_FLOOR[fs]
+
+    salt_taxes_paid = total_ca_tax  # only CA income tax for now
+    salt_excess = max(agi - SALT_PHASEOUT_THRESHOLD, 0)
+    salt_cap_effective = max(SALT_CAP - SALT_PHASEOUT_RATE * salt_excess, SALT_FLOOR)
+    salt_capped = min(salt_taxes_paid, salt_cap_effective)
+
+    # Itemized deduction = SALT (could add mortgage interest, charitable, etc. later)
+    itemized_deduction = salt_capped
+
+    # ── Choose: Standard vs. Itemized ──
+    if itemized_deduction > fed_std_deduction:
+        fed_deduction_used = itemized_deduction
+        fed_deduction_method = "itemized"
+    else:
+        fed_deduction_used = fed_std_deduction
+        fed_deduction_method = "standard"
+
     # ── Federal Ordinary Taxable Income ──
     # Excludes LTCG and qualified dividends (they are taxed separately)
-    fed_ordinary_taxable = max(agi - fed_std_deduction - preferential_income, 0)
+    fed_ordinary_taxable = max(agi - fed_deduction_used - preferential_income, 0)
 
     # ── Federal Ordinary Tax ──
     fed_ordinary_tax, fed_ordinary_details = calculate_progressive_tax(
@@ -227,14 +262,6 @@ def calculate_taxes(inputs, tax_data):
 
     # ── Total Federal Tax ──
     total_federal_tax = fed_ordinary_tax + fed_ltcg_tax + niit
-
-    # ── California Taxable Income ──
-    # CA taxes ALL income as ordinary (no preferential LTCG rates)
-    ca_taxable = max(agi - ca_std_deduction, 0)
-
-    # ── California Tax ──
-    ca_tax, ca_details = calculate_progressive_tax(ca_taxable, CA_BRACKETS)
-    total_ca_tax = ca_tax
 
     # ── FICA: Social Security (per-spouse wage base for MFJ) ──
     # SS wages = FICA wages (gross − Section 125 health deductions), capped per person
@@ -325,6 +352,12 @@ def calculate_taxes(inputs, tax_data):
         "agi": agi,
         "fed_std_deduction": fed_std_deduction,
         "ca_std_deduction": ca_std_deduction,
+        "salt_taxes_paid": salt_taxes_paid,
+        "salt_cap_effective": salt_cap_effective,
+        "salt_capped": salt_capped,
+        "itemized_deduction": itemized_deduction,
+        "fed_deduction_used": fed_deduction_used,
+        "fed_deduction_method": fed_deduction_method,
         "fed_ordinary_taxable": fed_ordinary_taxable,
         "ca_taxable": ca_taxable,
         "fed_ordinary_tax": fed_ordinary_tax,
