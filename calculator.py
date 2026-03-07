@@ -3,6 +3,8 @@ Core tax calculation functions.
 All computation logic — no I/O or formatting.
 """
 
+from constants import CAPITAL_LOSS_LIMIT
+
 
 def calculate_progressive_tax(taxable_income, brackets):
     """
@@ -121,15 +123,48 @@ def calculate_taxes(inputs, tax_data):
     CA_SDI_RATE = tax_data.CA_SDI_RATE
     NIIT_RATE = tax_data.NIIT_RATE
     NIIT_THRESHOLD = tax_data.NIIT_THRESHOLD[fs]
+    CAP_LOSS_LIMIT = CAPITAL_LOSS_LIMIT[fs]
+
+    # ── Capital Gains Netting (Schedule D logic) ──
+    # Net ST and LT separately, then combine.
+    # If net is negative, cap the deduction against ordinary income.
+    st_gains = inputs["st_cap_gains"]
+    lt_gains = inputs["lt_cap_gains"]
+    qualified_dividends = inputs["qualified_dividends"]
+    net_capital = st_gains + lt_gains
+
+    if net_capital >= 0:
+        # Net gain — determine character of the gain
+        if st_gains >= 0 and lt_gains >= 0:
+            # Both positive: ST is ordinary, LT is preferential
+            ordinary_cap_gains = st_gains
+            preferential_cap_gains = lt_gains
+        elif st_gains < 0:
+            # ST loss absorbed by LT gain; remainder is preferential
+            ordinary_cap_gains = 0
+            preferential_cap_gains = net_capital
+        else:
+            # LT loss absorbed by ST gain; remainder is ordinary
+            ordinary_cap_gains = net_capital
+            preferential_cap_gains = 0
+        capital_loss_applied = 0
+        capital_loss_carryforward = 0
+    else:
+        # Net loss — cap deduction at $3,000 ($1,500 MFS) against ordinary income
+        ordinary_cap_gains = 0
+        preferential_cap_gains = 0
+        capital_loss_applied = max(net_capital, -CAP_LOSS_LIMIT)  # e.g., max(-20000, -3000) = -3000
+        capital_loss_carryforward = abs(net_capital) - abs(capital_loss_applied)
 
     # ── Income Aggregation ──
     ordinary_additional = (
-        inputs["st_cap_gains"]
+        ordinary_cap_gains
+        + capital_loss_applied  # 0 or negative (capped deduction)
         + inputs["ordinary_dividends"]
         + inputs["interest_income"]
         + inputs["other_income"]
     )
-    preferential_income = inputs["lt_cap_gains"] + inputs["qualified_dividends"]
+    preferential_income = preferential_cap_gains + qualified_dividends
     total_additional = ordinary_additional + preferential_income
     total_gross = wages + total_additional
 
@@ -268,6 +303,13 @@ def calculate_taxes(inputs, tax_data):
     return {
         "filing_status": fs,
         "wages": wages,
+        "st_gains": st_gains,
+        "lt_gains": lt_gains,
+        "net_capital": net_capital,
+        "ordinary_cap_gains": ordinary_cap_gains,
+        "preferential_cap_gains": preferential_cap_gains,
+        "capital_loss_applied": capital_loss_applied,
+        "capital_loss_carryforward": capital_loss_carryforward,
         "ordinary_additional": ordinary_additional,
         "preferential_income": preferential_income,
         "total_additional": total_additional,

@@ -3,7 +3,7 @@ CLI display and input helper functions.
 Formatting, input validation, and report output components.
 """
 
-from constants import SINGLE, MFJ, MFS, HOH
+from constants import SINGLE, MFJ, MFS, HOH, CAPITAL_LOSS_LIMIT
 
 W = 70  # report width
 
@@ -27,7 +27,7 @@ def pct(rate):
     return f"{rate * 100:.2f}%"
 
 
-def get_input(prompt, required=False):
+def get_input(prompt, required=False, allow_negative=False):
     """Get a numeric input from the user with validation."""
     while True:
         raw = input(prompt).strip().replace(",", "").replace("$", "")
@@ -38,8 +38,8 @@ def get_input(prompt, required=False):
             return 0.0
         try:
             value = float(raw)
-            if value < 0:
-                print("  ⚠  Please enter a non-negative number.")
+            if value < 0 and not allow_negative:
+                print("  ⚠  Negative values not allowed for this field.")
                 continue
             return value
         except ValueError:
@@ -132,7 +132,7 @@ def collect_inputs():
     print("\n  ADDITIONAL INCOME — Ordinary (taxed at ordinary rates)")
     print("  " + "-" * 40)
     print("  (Press Enter to skip any field, defaults to $0)\n")
-    st_cap_gains = get_input("  Short-term capital gains:       $")
+    st_cap_gains = get_input("  Short-term capital gains:       $", allow_negative=True)
     ordinary_dividends = get_input("  Ordinary (non-qualified) div:   $")
     interest_income = get_input("  Interest income:                $")
     other_income = get_input("  Other income:                   $")
@@ -141,7 +141,7 @@ def collect_inputs():
     print("\n  ADDITIONAL INCOME — Preferential (LTCG / Qualified Dividends)")
     print("  " + "-" * 40)
     print("  (Press Enter to skip any field, defaults to $0)\n")
-    lt_cap_gains = get_input("  Long-term capital gains:        $")
+    lt_cap_gains = get_input("  Long-term capital gains:        $", allow_negative=True)
     qualified_dividends = get_input("  Qualified dividends:            $")
 
     # --- Pre-Tax Deductions ---
@@ -285,15 +285,33 @@ def display_results(r, tax_data):
     else:
         print(f"  Gross Wages/Salary:               {fmt(r['wages']):>16}")
     print()
+    print(f"  Capital Gains / Losses:")
+    print(f"    Short-term gains/losses:         {fmt(r['st_gains']):>16}")
+    print(f"    Long-term gains/losses:          {fmt(r['lt_gains']):>16}")
+    print(f"    Net capital gain/loss:           {fmt(r['net_capital']):>16}")
+
+    if r["net_capital"] < 0:
+        print(f"    Capital loss limit:              {fmt(-abs(r['capital_loss_applied'])):>16}")
+        print(f"      (max {fmt(CAPITAL_LOSS_LIMIT[fs])} deductible per year)")
+        if r["capital_loss_carryforward"] > 0:
+            print(f"    Loss carryforward (future yrs):  {fmt(r['capital_loss_carryforward']):>16}")
+    elif r["st_gains"] < 0 or r["lt_gains"] < 0:
+        # Net is positive but one side had losses — show netting result
+        if r["ordinary_cap_gains"] > 0:
+            print(f"    → Net flows as ordinary:         {fmt(r['ordinary_cap_gains']):>16}")
+        if r["preferential_cap_gains"] > 0:
+            print(f"    → Net flows as preferential:     {fmt(r['preferential_cap_gains']):>16}")
+
+    print()
     print(f"  Additional Ordinary Income:")
-    print(f"    Short-term capital gains:        {fmt(inputs['st_cap_gains']):>16}")
+    print(f"    Capital gains (ordinary):        {fmt(r['ordinary_cap_gains'] + r['capital_loss_applied']):>16}")
     print(f"    Ordinary dividends:              {fmt(inputs['ordinary_dividends']):>16}")
     print(f"    Interest income:                 {fmt(inputs['interest_income']):>16}")
     print(f"    Other income:                    {fmt(inputs['other_income']):>16}")
     print(f"    Subtotal:                        {fmt(r['ordinary_additional']):>16}")
     print()
     print(f"  Additional Preferential Income:")
-    print(f"    Long-term capital gains:         {fmt(inputs['lt_cap_gains']):>16}")
+    print(f"    Capital gains (preferential):    {fmt(r['preferential_cap_gains']):>16}")
     print(f"    Qualified dividends:             {fmt(inputs['qualified_dividends']):>16}")
     print(f"    Subtotal:                        {fmt(r['preferential_income']):>16}")
     print()
