@@ -279,7 +279,7 @@ def calculate_taxes(inputs, tax_data):
     total_all_taxes = total_federal_tax + total_ca_tax + total_payroll
 
     # ── Rates ──
-    effective_rate = total_all_taxes / total_gross if total_gross > 0 else 0
+    effective_rate = total_all_taxes / agi if agi > 0 else 0
 
     # Federal marginal rate (highest bracket ordinary income reaches)
     fed_marginal = 0.0
