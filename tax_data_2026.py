@@ -9,6 +9,8 @@ NOTE: Many values below are carried forward from 2025 as placeholders.
 
 from constants import SINGLE, MFJ, MFS, HOH
 
+TAX_YEAR = 2026
+
 # --- Federal Ordinary Income Tax Brackets (2026) ---
 # Format: list of (upper_limit, rate) — progressive/marginal brackets
 FEDERAL_BRACKETS = {

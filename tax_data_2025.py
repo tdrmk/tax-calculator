@@ -5,6 +5,8 @@ All year-specific brackets, rates, deductions, and thresholds.
 
 from constants import SINGLE, MFJ, MFS, HOH
 
+TAX_YEAR = 2025
+
 # --- Federal Ordinary Income Tax Brackets (2025) ---
 # Format: list of (upper_limit, rate) — progressive/marginal brackets
 FEDERAL_BRACKETS = {
