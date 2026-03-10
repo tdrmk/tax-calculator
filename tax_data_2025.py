@@ -83,6 +83,7 @@ FEDERAL_STANDARD_DEDUCTION = {
 # --- California Income Tax Brackets (2025) ---
 # Single and MFS use the same brackets (Schedule X)
 # MFJ uses Schedule Y, HOH uses Schedule Z (each has unique thresholds)
+# Includes 1% Mental Health Services Tax (Prop 63) on taxable income > $1M (all statuses)
 CA_BRACKETS = {
     SINGLE: [
         (11_079, 0.01),
@@ -93,7 +94,8 @@ CA_BRACKETS = {
         (371_479, 0.093),
         (445_771, 0.103),
         (742_953, 0.113),
-        (float("inf"), 0.123),
+        (1_000_000, 0.123),
+        (float("inf"), 0.133),
     ],
     MFJ: [
         (22_158, 0.01),
@@ -103,8 +105,9 @@ CA_BRACKETS = {
         (145_448, 0.08),
         (742_958, 0.093),
         (891_542, 0.103),
-        (1_485_906, 0.113),
-        (float("inf"), 0.123),
+        (1_000_000, 0.113),
+        (1_485_906, 0.123),
+        (float("inf"), 0.133),
     ],
     MFS: [
         (11_079, 0.01),
@@ -115,7 +118,8 @@ CA_BRACKETS = {
         (371_479, 0.093),
         (445_771, 0.103),
         (742_953, 0.113),
-        (float("inf"), 0.123),
+        (1_000_000, 0.123),
+        (float("inf"), 0.133),
     ],
     HOH: [
         (22_173, 0.01),
@@ -125,8 +129,9 @@ CA_BRACKETS = {
         (98_990, 0.08),
         (505_208, 0.093),
         (606_251, 0.103),
-        (1_010_417, 0.113),
-        (float("inf"), 0.123),
+        (1_000_000, 0.113),
+        (1_010_417, 0.123),
+        (float("inf"), 0.133),
     ],
 }
 
