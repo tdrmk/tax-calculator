@@ -101,6 +101,113 @@ Total tax = $199,627 + ($600,000 − $544,650) × 47.95%
 | Medicare | $10,549 | $55,350 × 2.35% = $1,301 | **$11,850** |
 | CA SDI | $7,080 | $55,350 × 1.3% = $720 | **$7,800** |
 | **Total** | | | **$226,167** |
+
+### Ordinary Investment Income
+*(interest, non-qualified dividends, short-term capital gains)*
+
+> Stack on top of wage income — find your **total AGI** to determine the starting bracket.  
+> No FICA (SS, Medicare) or SDI. NIIT of 3.8% applies above $250,000.
+
+| AGI Range | Fed | CA | NIIT | **Combined** |
+|---|---|---|---|---|
+| $0 – $11,754 | 0% | 0% | 0% | **0%** |
+| $11,754 – $32,200 | 0% | 1% | 0% | **1%** |
+| $32,200 – $34,577 | 10% | 1% | 0% | **11%** |
+| $34,577 – $57,000 | 10% | 2% | 0% | **12%** |
+| $57,000 – $65,858 | 12% | 2% | 0% | **14%** |
+| $65,858 – $97,145 | 12% | 4% | 0% | **16%** |
+| $97,145 – $130,291 | 12% | 6% | 0% | **18%** |
+| $130,291 – $133,000 | 12% | 8% | 0% | **20%** |
+| $133,000 – $161,565 | 22% | 8% | 0% | **30%** |
+| $161,565 – $243,600 | 22% | 9.3% | 0% | **31.3%** |
+| $243,600 – $250,000 | 24% | 9.3% | 0% | **33.3%** |
+| $250,000 – $435,750 | 24% | 9.3% | 3.8% | **37.1%** |
+| $435,750 – $544,650 | 32% | 9.3% | 3.8% | **45.1%** |
+| $544,650 – $777,001 | 35% | 9.3% | 3.8% | **48.1%** |
+| $777,001 – $800,900 | 35% | 10.3% | 3.8% | **49.1%** |
+| $800,900 – $930,042 | 37% | 10.3% | 3.8% | **51.1%** |
+| $930,042 – $1,011,754 | 37% | 11.3% | 3.8% | **52.1%** |
+| $1,011,754 – $1,542,237 | 37% | 12.3% | 3.8% | **53.1%** |
+| $1,542,237 – ∞ | 37% | 13.3% | 3.8% | **54.1%** |
+
+### Preferential Investment Income
+*(long-term capital gains, qualified dividends)*
+
+> Stack on top of **all ordinary taxable income** (wages + ordinary investment) to find the starting bracket.  
+> Federal uses 0%/15%/20% LTCG brackets. CA taxes capital gains as ordinary income (no preferential rate). NIIT of 3.8% applies above $250,000.
+
+| AGI Range | Fed (LTCG) | CA | NIIT | **Combined** |
+|---|---|---|---|---|
+| $0 – $11,754 | 0% | 0% | 0% | **0%** |
+| $11,754 – $32,200 | 0% | 1% | 0% | **1%** |
+| $32,200 – $34,577 | 0% | 1% | 0% | **1%** |
+| $34,577 – $65,858 | 0% | 2% | 0% | **2%** |
+| $65,858 – $97,145 | 0% | 4% | 0% | **4%** |
+| $97,145 – $130,291 | 0% | 6% | 0% | **6%** |
+| $130,291 – $131,100 | 0% | 8% | 0% | **8%** |
+| $131,100 – $161,565 | 15% | 8% | 0% | **23%** |
+| $161,565 – $250,000 | 15% | 9.3% | 0% | **24.3%** |
+| $250,000 – $645,900 | 15% | 9.3% | 3.8% | **28.1%** |
+| $645,900 – $777,001 | 20% | 9.3% | 3.8% | **33.1%** |
+| $777,001 – $930,042 | 20% | 10.3% | 3.8% | **34.1%** |
+| $930,042 – $1,011,754 | 20% | 11.3% | 3.8% | **35.1%** |
+| $1,011,754 – $1,542,237 | 20% | 12.3% | 3.8% | **36.1%** |
+| $1,542,237 – ∞ | 20% | 13.3% | 3.8% | **37.1%** |
+
+### Example — Combined Income
+
+**Scenario:** $400,000 wages + $50,000 ordinary investment income + $50,000 LTCG/qualified dividends  
+**Total AGI:** $500,000
+
+**Step 1 — Wages** ($400,000, from wage table):
+
+```
+Wage taxes = $126,012 + ($400,000 − $369,000) × 36.95%
+           = $137,466
+```
+
+**Step 2 — Ordinary investment income** (stacks $400,000 → $450,000):
+
+| Bracket | Amount | Combined | Tax |
+|---|---|---|---|
+| $250,000 – $435,750 | $35,750 | 37.1% | $13,263 |
+| $435,750 – $544,650 | $14,250 | 45.1% | $6,427 |
+| **Total** | **$50,000** | | **$19,690** |
+
+**Step 3 — Preferential income (LTCG/qualified dividends)** (stacks $450,000 → $500,000):
+
+| Bracket | Amount | Combined | Tax |
+|---|---|---|---|
+| $250,000 – $645,900 | $50,000 | 28.1% | $14,050 |
+
+**Grand total:**
+
+| Category | Tax |
+|---|---|
+| Wages | $137,466 |
+| Ordinary investment | $19,690 |
+| Preferential (LTCG) | $14,050 |
+| **Total** | **$171,206** |
+| Effective rate on $500,000 | **34.24%** |
+
+### Example — 401(k) Max Contribution ($600,000 wages)
+
+**Scenario:** $600,000 wages, $49,000 (2 × $24,500) pre-tax 401(k) contribution  
+> 401(k) reduces AGI for federal and CA income tax, but FICA (SS, Medicare) and SDI are based on gross wages.
+
+| | Without 401(k) | With 401(k) | Δ |
+|---|---|---|---|
+| AGI | $600,000 | $551,000 | −$49,000 |
+| Federal | $136,268 | $119,118 | −$17,150 |
+| CA State | $47,370 | $42,813 | −$4,557 |
+| Social Security | $22,878 | $22,878 | $0 |
+| Medicare | $11,850 | $11,850 | $0 |
+| CA SDI | $7,800 | $7,800 | $0 |
+| **Total tax** | **$226,167** | **$204,460** | **−$21,707** |
+| **Take-home** | **$373,833** | **$346,540** | **−$27,293 (-7.3%)** |
+
+> $49,000 contributed = $27,293 from take-home (56%) + $21,707 from tax savings (44%)  
+> → Every $1 less in take-home puts **$1.80** into your 401(k).
 ---
 
 ## Single
@@ -199,3 +306,129 @@ Total tax = $154,844 + ($400,000 − $388,500) × 48.95%
 | Medicare | $7,330 | $11,500 × 2.35% = $270 | **$7,600** |
 | CA SDI | $5,050 | $11,500 × 1.3% = $150 | **$5,200** |
 | **Total** | | | **$160,473** |
+
+### Ordinary Investment Income
+*(interest, non-qualified dividends, short-term capital gains)*
+
+> Stack on top of wage income — find your **total AGI** to determine the starting bracket.  
+> No FICA (SS, Medicare) or SDI. NIIT of 3.8% applies above $200,000.
+
+| AGI Range | Fed | CA | NIIT | **Combined** |
+|---|---|---|---|---|
+| $0 – $5,877 | 0% | 0% | 0% | **0%** |
+| $5,877 – $16,100 | 0% | 1% | 0% | **1%** |
+| $16,100 – $17,288 | 10% | 1% | 0% | **11%** |
+| $17,288 – $28,500 | 10% | 2% | 0% | **12%** |
+| $28,500 – $32,929 | 12% | 2% | 0% | **14%** |
+| $32,929 – $48,573 | 12% | 4% | 0% | **16%** |
+| $48,573 – $65,145 | 12% | 6% | 0% | **18%** |
+| $65,145 – $66,500 | 12% | 8% | 0% | **20%** |
+| $66,500 – $80,783 | 22% | 8% | 0% | **30%** |
+| $80,783 – $121,800 | 22% | 9.3% | 0% | **31.3%** |
+| $121,800 – $200,000 | 24% | 9.3% | 0% | **33.3%** |
+| $200,000 – $217,875 | 24% | 9.3% | 3.8% | **37.1%** |
+| $217,875 – $272,325 | 32% | 9.3% | 3.8% | **45.1%** |
+| $272,325 – $388,500 | 35% | 9.3% | 3.8% | **48.1%** |
+| $388,500 – $465,021 | 35% | 10.3% | 3.8% | **49.1%** |
+| $465,021 – $656,700 | 35% | 11.3% | 3.8% | **50.1%** |
+| $656,700 – $771,119 | 37% | 11.3% | 3.8% | **52.1%** |
+| $771,119 – $1,005,877 | 37% | 12.3% | 3.8% | **53.1%** |
+| $1,005,877 – ∞ | 37% | 13.3% | 3.8% | **54.1%** |
+
+### Preferential Investment Income
+*(long-term capital gains, qualified dividends)*
+
+> Stack on top of **all ordinary taxable income** (wages + ordinary investment) to find the starting bracket.  
+> Federal uses 0%/15%/20% LTCG brackets. CA taxes capital gains as ordinary income (no preferential rate). NIIT of 3.8% applies above $200,000.
+
+| AGI Range | Fed (LTCG) | CA | NIIT | **Combined** |
+|---|---|---|---|---|
+| $0 – $5,877 | 0% | 0% | 0% | **0%** |
+| $5,877 – $16,100 | 0% | 1% | 0% | **1%** |
+| $16,100 – $17,288 | 0% | 1% | 0% | **1%** |
+| $17,288 – $32,929 | 0% | 2% | 0% | **2%** |
+| $32,929 – $48,573 | 0% | 4% | 0% | **4%** |
+| $48,573 – $65,145 | 0% | 6% | 0% | **6%** |
+| $65,145 – $65,550 | 0% | 8% | 0% | **8%** |
+| $65,550 – $80,783 | 15% | 8% | 0% | **23%** |
+| $80,783 – $200,000 | 15% | 9.3% | 0% | **24.3%** |
+| $200,000 – $388,500 | 15% | 9.3% | 3.8% | **28.1%** |
+| $388,500 – $465,021 | 15% | 10.3% | 3.8% | **29.1%** |
+| $465,021 – $561,600 | 15% | 11.3% | 3.8% | **30.1%** |
+| $561,600 – $771,119 | 20% | 11.3% | 3.8% | **35.1%** |
+| $771,119 – $1,005,877 | 20% | 12.3% | 3.8% | **36.1%** |
+| $1,005,877 – ∞ | 20% | 13.3% | 3.8% | **37.1%** |
+
+### Example — Combined Income
+
+**Scenario:** $200,000 wages + $25,000 ordinary investment income + $25,000 LTCG/qualified dividends  
+**Total AGI:** $250,000
+
+**Step 1 — Wages** ($200,000, from wage table):
+
+```
+Wage taxes = $68,058 + ($200,000 − $200,000) × 36.95%
+           = $68,058
+```
+
+**Step 2 — Ordinary investment income** (stacks $200,000 → $225,000):
+
+| Bracket | Amount | Combined | Tax |
+|---|---|---|---|
+| $200,000 – $217,875 | $17,875 | 37.1% | $6,632 |
+| $217,875 – $272,325 | $7,125 | 45.1% | $3,213 |
+| **Total** | **$25,000** | | **$9,845** |
+
+**Step 3 — Preferential income (LTCG/qualified dividends)** (stacks $225,000 → $250,000):
+
+| Bracket | Amount | Combined | Tax |
+|---|---|---|---|
+| $200,000 – $388,500 | $25,000 | 28.1% | $7,025 |
+
+**Grand total:**
+
+| Category | Tax |
+|---|---|
+| Wages | $68,058 |
+| Ordinary investment | $9,845 |
+| Preferential (LTCG) | $7,025 |
+| **Total** | **$84,928** |
+| Effective rate on $250,000 | **33.97%** |
+
+### Example — 401(k) Max Contribution ($400,000 wages)
+
+**Scenario:** $400,000 wages, $24,500 pre-tax 401(k) contribution  
+> 401(k) reduces AGI for federal and CA income tax, but FICA (SS, Medicare) and SDI are based on gross wages.
+
+| | Without 401(k) | With 401(k) | Δ |
+|---|---|---|---|
+| AGI | $400,000 | $375,500 | −$24,500 |
+| Federal | $103,134 | $94,559 | −$8,575 |
+| CA State | $33,100 | $30,707 | −$2,394 |
+| Social Security | $11,439 | $11,439 | $0 |
+| Medicare | $7,600 | $7,600 | $0 |
+| CA SDI | $5,200 | $5,200 | $0 |
+| **Total tax** | **$160,473** | **$149,505** | **−$10,968** |
+| **Take-home** | **$239,527** | **$225,995** | **−$13,532 (-5.6%)** |
+
+> $24,500 contributed = $13,532 from take-home (55%) + $10,968 from tax savings (45%)  
+> → Every $1 less in take-home puts **$1.81** into your 401(k).
+
+### Example — 401(k) Max Contribution ($200,000 wages)
+
+**Scenario:** $200,000 wages, $24,500 pre-tax 401(k) contribution  
+> 401(k) reduces AGI for federal and CA income tax, but FICA (SS, Medicare) and SDI are based on gross wages.
+
+| | Without 401(k) | With 401(k) | Δ |
+|---|---|---|---|
+| AGI | $200,000 | $175,500 | −$24,500 |
+| Federal | $36,734 | $30,854 | −$5,880 |
+| CA State | $14,385 | $12,107 | −$2,278 |
+| Social Security | $11,439 | $11,439 | $0 |
+| Medicare | $2,900 | $2,900 | $0 |
+| CA SDI | $2,600 | $2,600 | $0 |
+| **Total tax** | **$68,058** | **$59,900** | **−$8,158** |
+| **Take-home** | **$131,942** | **$115,600** | **−$16,342 (-12.4%)** |
+
+> $24,500 contributed = $16,342 from take-home (67%) + $8,158 from tax savings (33%)  
+> → Every $1 less in take-home puts **$1.50** into your 401(k).
