@@ -21,6 +21,8 @@ Also generates a Sankey diagram visualizing how gross income flows into each tax
 - Per-bracket breakdowns, W-2 wage reconciliation, effective and marginal tax rates
 - Sankey diagram visualization of income flow
 
+> **SALT Deduction:** The `salt-deduction` branch adds SALT (State and Local Tax) deduction support — computes CA income tax as SALT, applies the $40K OBBBA cap with income-based phase-out (30% reduction above $500K MAGI, floored at $10K), and automatically compares standard vs. itemized deductions. See [salt-deduction.md](https://github.com/tdrmk/tax-calculator/blob/salt-deduction/salt-deduction.md) on that branch for details.
+
 See [requirements.md](requirements.md) for the full specification — inputs, calculation formulas, tax rules, output format, and UX behavior.
 
 ## Supported Tax Years
