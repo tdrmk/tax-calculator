@@ -22,7 +22,7 @@ Income from taxable brokerage accounts and savings, split into two tax buckets:
 
 | # | Income Type | Source |
 |---|------------|--------|
-| 1 | **Short-term capital gains** | Assets held ≤ 1 year |
+| 1 | **Short-term capital gains/losses** | Assets held ≤ 1 year (negative values allowed) |
 | 2 | **Ordinary (non-qualified) dividends** | Dividends not meeting qualified holding period |
 | 3 | **Interest income** | Bond coupons, savings accounts, money market interest, etc. |
 | 4 | **Other income** | Any other ordinary income not covered above |
@@ -31,8 +31,23 @@ Income from taxable brokerage accounts and savings, split into two tax buckets:
 
 | # | Income Type | Source |
 |---|------------|--------|
-| 5 | **Long-term capital gains** | Assets held > 1 year |
+| 5 | **Long-term capital gains/losses** | Assets held > 1 year (negative values allowed) |
 | 6 | **Qualified dividends** | Dividends meeting holding period requirements |
+
+### 2.3 Capital Gains Netting (Schedule D)
+
+When ST and/or LT capital gains are negative (losses), Schedule D netting applies:
+
+1. **Net ST and LT separately**, then combine into a single net capital gain/loss
+2. **Net gain** — determine character of the result:
+   - Both positive: ST flows to ordinary income, LT flows to preferential income
+   - ST loss absorbed by LT gain: net remainder flows as preferential
+   - LT loss absorbed by ST gain: net remainder flows as ordinary
+3. **Net loss** — capital loss deduction is capped per year (IRC §1211(b)):
+   - **$3,000** for Single, MFJ, HoH
+   - **$1,500** for MFS
+   - Capped loss deducts against ordinary income
+   - Excess carries forward to future tax years (tracked but informational only)
 
 ---
 
@@ -61,6 +76,7 @@ Pre-tax deductions are collected in **three categories**. For MFJ, each category
 |---|-------------|-------|
 | 1 | **Non-deductible Traditional IRA** | Contributed with after-tax dollars; no deduction at higher income levels |
 | 2 | **After-tax 401(k)** | Post-tax contributions (commonly used for mega backdoor Roth) |
+| 3 | **Other post-tax contributions** | Any other after-tax contributions not covered above |
 
 ---
 
@@ -129,10 +145,10 @@ Different taxes apply to different "wage" definitions. These correspond to W-2 b
 ### 9.1 California Taxable Income
 - `CA taxable income = AGI − CA standard deduction`
 - **California taxes ALL income as ordinary** — no special rates for long-term capital gains or qualified dividends
-- CA Mental Health Services Tax (Prop 63) is **excluded** from this calculator
 
 ### 9.2 California Tax Brackets (2025)
-- Progressive brackets: **1%, 2%, 4%, 6%, 8%, 9.3%, 10.3%, 11.3%, 12.3%**
+- Progressive brackets: **1%, 2%, 4%, 6%, 8%, 9.3%, 10.3%, 11.3%, 12.3%, 13.3%**
+- Includes CA Mental Health Services Tax (Prop 63): additional **1%** on taxable income over **$1,000,000** (all filing statuses), making the effective top rate **13.3%**
 
 ### 9.3 California Tax Owed
 - Calculated by applying CA progressive brackets to CA taxable income
@@ -167,6 +183,13 @@ FICA taxes are calculated on **FICA wages** (Gross wages − Health − Other de
 - **1.2%** on **all FICA wages** (no wage limit)
 - Does NOT apply to investment income (only wages)
 - Follows FICA wage treatment (Health and Other deductions reduce SDI wages)
+- For MFJ, SDI is calculated **per spouse** on their individual FICA wages
+
+### 11.2 CA VDI (Voluntary Disability Insurance)
+- Some employers offer VDI plans as an alternative to standard CA SDI
+- If enrolled, the disability insurance cost is the **lesser of**: standard SDI (rate × FICA wages) or the VDI plan's max annual contribution
+- VDI enrollment and max contribution are collected **per spouse** for MFJ
+- If not enrolled, standard SDI applies
 
 ---
 
@@ -178,8 +201,11 @@ The calculator displays a detailed breakdown report with the following sections:
 - Filing status
 - For MFJ: Spouse 1 wages, Spouse 2 wages, and combined wages
 - For other statuses: gross wages/salary
-- Additional ordinary income breakdown (short-term gains, ordinary dividends, interest income, other income, subtotal)
-- Additional preferential income breakdown (long-term gains, qualified dividends, subtotal)
+- Capital gains / losses: ST gains/losses, LT gains/losses, net capital gain/loss
+  - If net loss: capital loss limit applied, carryforward amount (if any)
+  - If net gain with mixed signs: shows how net flows to ordinary vs. preferential
+- Additional ordinary income breakdown (capital gains flowing as ordinary, ordinary dividends, interest income, other income, subtotal)
+- Additional preferential income breakdown (capital gains flowing as preferential, qualified dividends, subtotal)
 - **Total gross income** (highlighted)
 
 ### 12.2 Pre-Tax Deductions Section
@@ -204,6 +230,7 @@ The calculator displays a detailed breakdown report with the following sections:
 ### 12.6 Taxable Income
 - Federal ordinary taxable income (with formula)
 - Federal preferential income (with formula)
+- Federal taxable income (ordinary + preferential combined)
 - California taxable income (with formula)
 
 ### 12.7 Federal Tax Breakdown
@@ -220,8 +247,8 @@ The calculator displays a detailed breakdown report with the following sections:
 - Social Security tax — for MFJ: per-spouse FICA wages (capped), per-spouse tax, combined tax
 - Medicare tax — FICA wages and tax
 - Additional Medicare tax (if applicable) — excess wages and tax
-- CA SDI tax — FICA wages and tax
-- Total FICA + CA SDI
+- CA SDI / VDI tax — if VDI enrolled, shows standard SDI, VDI max, and applied (lesser of); per-spouse for MFJ
+- Total FICA + CA SDI/VDI
 - **Total payroll taxes** (highlighted)
 
 ### 12.10 Tax Summary
@@ -229,13 +256,14 @@ The calculator displays a detailed breakdown report with the following sections:
 - Total California tax
 - Total payroll taxes (FICA + CA SDI)
 - **Total all taxes** (double-highlighted)
-- **Effective tax rate** (total all taxes ÷ total gross income)
+- **Effective tax rate** (total all taxes ÷ AGI)
 - **Marginal tax rate — federal ordinary**
 - **Marginal tax rate — California**
 
 ### 12.11 Post-Tax Contributions Section (informational)
 - Non-deductible Traditional IRA contributions
 - After-tax 401(k) contributions
+- Other post-tax contributions
 - **Total post-tax contributions**
 
 ### 12.12 Take-Home Pay
@@ -251,7 +279,7 @@ The calculator displays a detailed breakdown report with the following sections:
 
 ### 13.2 Input Validation
 - Handle non-numeric entries gracefully with clear error messages
-- Reject negative numbers
+- Reject negative numbers (except short-term and long-term capital gains, which allow losses)
 - Allow `0` or empty input for optional fields (default to $0)
 - Wages are required fields
 
