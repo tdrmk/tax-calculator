@@ -22,30 +22,30 @@ FILING_STATUS = "2"
 
 # Wages/Salary
 # For MFJ: set both spouse wages; for all others only SPOUSE_1_WAGES is used
-SPOUSE_1_WAGES = "200000"
-SPOUSE_2_WAGES = "0"  # only used when FILING_STATUS = "2" (MFJ)
+SPOUSE_1_WAGES = "400000"
+SPOUSE_2_WAGES = "100000"  # only used when FILING_STATUS = "2" (MFJ)
 
 # Additional Income — Ordinary (taxed at ordinary rates)
-SHORT_TERM_CAP_GAINS = "5000"
-ORDINARY_DIVIDENDS = "1000"
-INTEREST_INCOME = "500"
+SHORT_TERM_CAP_GAINS = "2000"
+ORDINARY_DIVIDENDS = "2000"
+INTEREST_INCOME = "2000"
 OTHER_INCOME = "2000"
 
 # Additional Income — Preferential (LTCG / Qualified Dividends)
-LONG_TERM_CAP_GAINS = "10000"
-QUALIFIED_DIVIDENDS = "3000"
+LONG_TERM_CAP_GAINS = "2000"
+QUALIFIED_DIVIDENDS = "2000"
 
 # Pre-Tax Deductions — Spouse 1 (used for all filing statuses)
 # Retirement: 401k, 403b, 457b, etc.
 # Health: premiums, HSA, FSA, dental/vision, dependent care FSA
 # Other: commuter/transit, life insurance, etc.
-S1_RETIREMENT = "23500"
-S1_HEALTH = "4500"
+S1_RETIREMENT = "20000"
+S1_HEALTH = "1000"
 S1_OTHER = "0"
 
 # Pre-Tax Deductions — Spouse 2 (only used when FILING_STATUS = "2" / MFJ)
-S2_RETIREMENT = "23500"
-S2_HEALTH = "2500"
+S2_RETIREMENT = "10000"
+S2_HEALTH = "1000"
 S2_OTHER = "0"
 
 # CA VDI (Voluntary Disability Insurance)
@@ -56,7 +56,7 @@ S2_VDI_ENROLLED = "n"  # "y" or "n" (only used for MFJ)
 S2_VDI_MAX = "0"       # only used if S2_VDI_ENROLLED = "y"
 
 # Post-Tax Contributions (informational only)
-NONDEDUCTIBLE_IRA = "7000"
+NONDEDUCTIBLE_IRA = "14000"
 AFTER_TAX_401K = "15000"
 OTHER_POSTTAX = "0"
 
