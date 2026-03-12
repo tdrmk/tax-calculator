@@ -207,9 +207,6 @@ def calculate_taxes(inputs, tax_data):
 
     # ── California Tax ──
     ca_tax, ca_details = calculate_progressive_tax(ca_taxable, CA_BRACKETS)
-    # TODO: Add CA Mental Health Services Tax (Prop 63) — additional 1% on
-    #       taxable income over $1,000,000 (all filing statuses), making the
-    #       effective top CA rate 13.3% instead of 12.3%.
     total_ca_tax = ca_tax
 
     # ── SALT Deduction (Itemized) ──
