@@ -170,3 +170,26 @@ NIIT_THRESHOLD = {
     MFS: 125_000,
     HOH: 200_000,
 }
+
+# --- SALT (State and Local Tax) Deduction Limits (2025, OBBBA) ---
+# Only applies when itemizing; compared against standard deduction.
+# Phase-out: cap reduced by 30% of MAGI exceeding threshold, floored at old $10K cap.
+SALT_CAP = {
+    SINGLE: 40_000,
+    MFJ: 40_000,
+    MFS: 20_000,
+    HOH: 40_000,
+}
+SALT_PHASEOUT_THRESHOLD = {
+    SINGLE: 500_000,
+    MFJ: 500_000,
+    MFS: 250_000,
+    HOH: 500_000,
+}
+SALT_PHASEOUT_RATE = 0.30
+SALT_FLOOR = {
+    SINGLE: 10_000,
+    MFJ: 10_000,
+    MFS: 5_000,
+    HOH: 10_000,
+}

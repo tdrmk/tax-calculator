@@ -170,3 +170,17 @@ NIIT_THRESHOLD = {
     MFS: 125_000,
     HOH: 200_000,
 }
+
+# --- SALT (State and Local Tax) Deduction Limits (2024, TCJA flat cap) ---
+# TCJA §11042 imposed a flat $10K cap ($5K MFS) on the combined SALT deduction
+# for tax years 2018–2025. No income-based phase-out existed until the 2025 OBBBA.
+# Set phase-out fields to None so calculator.py skips phase-out logic for this year.
+SALT_CAP = {
+    SINGLE: 10_000,
+    MFJ: 10_000,
+    MFS: 5_000,
+    HOH: 10_000,
+}
+SALT_PHASEOUT_THRESHOLD = None  # no phase-out pre-2025
+SALT_PHASEOUT_RATE = None
+SALT_FLOOR = None

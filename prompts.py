@@ -374,15 +374,32 @@ def display_results(r, tax_data):
     print()
     highlight_box("AGI:                              ", fmt(r["agi"]))
 
-    # ── 5. Standard Deductions ──
-    section_header("STANDARD DEDUCTIONS")
-    print(f"  Federal Standard Deduction:       {fmt(r['fed_std_deduction']):>16}")
+    # ── 5. Deductions — Standard vs. Itemized (SALT) ──
+    section_header("FEDERAL DEDUCTION — Standard vs. Itemized (SALT)")
+    print(f"  Standard Deduction:               {fmt(r['fed_std_deduction']):>16}")
+    print()
+    print(f"  Itemized Deduction (SALT only):")
+    print(f"    CA state income tax paid:        {fmt(r['salt_taxes_paid']):>16}")
+    print(f"    SALT cap (after phase-out):      {fmt(r['salt_cap_effective']):>16}")
+    print(f"    Allowable SALT deduction:        {fmt(r['salt_capped']):>16}")
+    print(f"    Total itemized:                  {fmt(r['itemized_deduction']):>16}")
+    print()
+    method = r["fed_deduction_method"]
+    if method == "itemized":
+        print(f"  ✓ Using ITEMIZED deduction:       {fmt(r['fed_deduction_used']):>16}")
+        print(f"    (Itemized {fmt(r['itemized_deduction'])} > Standard {fmt(r['fed_std_deduction'])})")
+    else:
+        print(f"  ✓ Using STANDARD deduction:       {fmt(r['fed_deduction_used']):>16}")
+        print(f"    (Standard {fmt(r['fed_std_deduction'])} ≥ Itemized {fmt(r['itemized_deduction'])})")
+    print()
     print(f"  California Standard Deduction:    {fmt(r['ca_std_deduction']):>16}")
+    print(f"    (CA does not use SALT — always standard)")
 
     # ── 6. Taxable Income ──
     section_header("TAXABLE INCOME")
+    deduction_label = "Itemized" if method == "itemized" else "Std"
     print(f"  Federal Ordinary Taxable Income:  {fmt(r['fed_ordinary_taxable']):>16}")
-    print(f"    = AGI - Fed Std Deduction - Preferential Income")
+    print(f"    = AGI - Fed {deduction_label} Deduction - Preferential Income")
     print(f"  Federal Preferential Income:      {fmt(r['preferential_income']):>16}")
     print(f"    = LTCG + Qualified Dividends (stacked on ordinary)")
     print(f"  Federal Taxable Income:           {fmt(r['fed_ordinary_taxable'] + r['preferential_income']):>16}")
